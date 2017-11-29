@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<style>
+    html,body{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #eeeeee;
+    }
+    .list{
+        width: 100px;
+        height: 100px;
+        position: absolute;
+    }
+
+</style>
+<body>
+    <section id="app">
+        <notes v-for ="item in notes" :msg="item">
+
+        </notes>
+    </section>
+</body>
+<script>
+    let arr=[
+        {id:1,content:'zhangzh',color:'#ffffff',x:100,y:100,type:'睿智'},
+        {id:2,content:'阿Q',color:'#333333',x:200,y:200,type:'睿智'},
+        {id:3,content:'阿衰',color:'#333333',x:300,y:300,type:'睿智'},
+        {id:4,content:'闰土',color:'#333333',x:400,y:100,type:'睿智'},
+        {id:5,content:'祥子',color:'#333333',x:500,y:200,type:'睿智'},
+        {id:6,content:'祥林嫂',color:'#333333',x:600,y:300,type:'睿智'},
+    ];
+    localStorage.notes=JSON.stringify(arr);
+
+
+    Vue.component('notes', {
+        props: ['msg'],
+        template: `<div class="list" v-bind:style="{left:msg.x+'px',top:msg.y+'px',border:'1px solid'+msg.color }"
+> {{msg.content}}</div>`
+    })
+
+    let app= new Vue({
+        el:'#app',
+        data:{
+          notes:[],
+        },
+        mounted(){
+            this.notes =JSON.parse(localStorage.notes)
+            console.log(this.notes )
+        },
+
+    })
+
+</script>
+</html>

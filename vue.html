@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="vue.js"></script>
+</head>
+<style>
+	header {height:50px;background:#333;background:rgba(47,47,47,0.98);}
+	label{float:left;width:100px;line-height:50px;color:#DDD;font-size:24px;cursor:pointer;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
+
+</style>
+<body>
+
+	<section id="app">
+		<header>
+		<h1>ToDoList</h1>
+		<input type="text" @keydown.13="add" v-model="msg">
+		</header>
+		<h2>doing</h2>
+		<ul>
+
+			<li v-for="v in filter.doing">
+				<input type="checkbox" v-model="v.status">
+				{{v.content}}
+				<button @click="del(v.id)">删除</button>
+			</li>
+		</ul>
+		<h2>finish</h2>
+		<ol>
+			<li v-for="v in filter.done">
+				<input type="checkbox" v-model="v.status">
+				{{v.content}}
+				<button @click="del(v.id)">删除</button>
+
+			</li>
+		</ol>
+	</section>
+
+</body>
+<script>
+//	let arr=[
+//        { id:1,content:'123',status:false},
+//        { id:2,content:'234',status:false},
+//        { id:3,content:'345',status:false},
+//        { id:4,content:'456',status:true},
+//        { id:5,content:'567',status:true},
+//        { id:6,content:'678',status:true},
+//    ]
+//
+//	localStorage.todos=JSON.stringify(arr);
+	let app= new Vue({
+		el:'#app',
+        data: {
+            todos: [],
+			lastid:0,
+			msg:''
+        },
+		computed:{
+		    filter(){
+		        let data={doing:[],done:[]};
+                data.doing=this.todos.filter(ele=>ele.status);
+                data.done=this.todos.filter(ele=>!ele.status);
+                return data;
+			}
+
+		},
+		methods:{
+            del(ids){
+				this.todos=this.todos.filter(ele=>ele.id!=ids);
+            },
+			add(){
+                let data={
+                    id:0,content:msg,status:false
+				}
+				console.log(data)
+			}
+		},
+        mounted(){
+            this.todos =JSON.parse(localStorage.todos)
+			this.lastid=this.todos.length
+        },
+	})
+	app.$watch('todos',function(v,oid){
+    	localStorage.todos = JSON.stringify(this.todos);
+	},{deep:true})
+
+
+</script>
+</html>
